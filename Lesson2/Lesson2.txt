@@ -1,0 +1,47 @@
+Task 1
+
+a) 	SELECT *
+	FROM Sales.SalesTerritory
+
+b)	SELECT TerritoryID, Name 
+	FROM Sales.SalesTerritory
+
+c)	SELECT *
+	FROM Person.Person
+	WHERE LastName = 'Norman'
+
+d)	SELECT *
+	FROM Person.Person
+	WHERE EmailPromotion <> 2
+
+
+Task 3
+COUNT BIG
+STDEV
+VAR
+STRING AGG
+
+Task 4
+
+a) Answer - 6
+	SELECT COUNT(DISTINCT PersonType) AS UniquePT
+	FROM Person.Person
+	WHERE LastName LIKE 'M%' OR EmailPromotion <> 1
+
+b)	SELECT TOP 3 * 
+	FROM Sales.SpecialOffer
+	WHERE StartDate BETWEEN '2013-01-01' AND '2014-01-01'
+	ORDER BY DiscountPct DESC
+
+c) 	SELECT MIN(Size) AS Minsize, MAX(Weight) AS Maxweight
+	FROM Production.Product
+
+d)	SELECT ProductSubcategoryID, MIN(Size) AS Minsize, MAX(Weight) AS Maxweight
+	FROM Production.Product
+	GROUP BY ProductSubcategoryID
+
+e)	SELECT ProductSubcategoryID, MIN(Size) AS Minsize, MAX(Weight) AS Maxweight
+	FROM Production.Product
+	WHERE Color IS NOT NULL AND ProductSubcategoryID IS NOT NULL
+	GROUP BY ProductSubcategoryID
+	ORDER BY ProductSubcategoryID
