@@ -1,0 +1,7 @@
+Well done!
+
+4.a
+Email Promotion should not INCLUDE (it's not = should not BE EQUAL). 
+
+4.e
+It was not asked to 1) sort results and 2) filter empty ids. 
