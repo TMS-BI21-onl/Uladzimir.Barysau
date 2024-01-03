@@ -1,0 +1,15 @@
+Task 3
+
+c) 	SELECT
+		pp.Name AS ProductName,
+		COUNT(ssop.ProductID) AS SpecialOffer
+	FROM 
+		Production.Product pp 
+		JOIN Sales.SpecialOfferProduct ssop ON pp.ProductID = ssop.ProductID
+		JOIN Sales.SpecialOffer sso ON ssop.SpecialOfferID = sso.SpecialOfferID
+	GROUP BY
+		pp.Name
+	HAVING
+		COUNT(ssop.ProductID) > 1
+	ORDER BY
+		pp.Name
