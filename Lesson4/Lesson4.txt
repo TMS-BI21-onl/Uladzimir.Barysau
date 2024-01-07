@@ -1,0 +1,123 @@
+Task 3
+
+If the table consists of 1 row or when we use TOP 1 in SELECT.
+
+
+Task 4
+
+a) 	SELECT *
+	FROM 
+		Production.UnitMeasure
+	WHERE 
+		UnitMeasureCode LIKE 'T%' -- answer - 0 (after adding - 2)
+
+	_______________________________________________________________________________________________
+
+	SELECT 
+		UnitMeasureCode
+	FROM 
+		Production.UnitMeasure
+	GROUP BY 
+		UnitMeasureCode -- answer 38
+	_______________________________________________________________________________________________
+
+	INSERT INTO 
+		Production.UnitMeasure (UnitMeasureCode, Name, ModifiedDate)
+	VALUES 
+		('TT1', 'Test 1', '2020-09-09'), 
+		('TT2', 'Test 2', getdate())
+
+b)	SELECT 
+		UnitMeasureCode,
+		Name,
+		ModifiedDate
+	INTO 
+		Production.UnitMeasureTest
+	FROM
+		Production.UnitMeasure
+	WHERE 
+		UnitMeasureCode LIKE 'T%'
+	_______________________________________________________________________________________________
+
+	INSERT INTO 
+		Production.UnitMeasureTest (UnitMeasureCode, Name, ModifiedDate)
+	SELECT 
+		UnitMeasureCode, 
+		Name, 
+		ModifiedDate
+	FROM 
+		Production.UnitMeasure
+	WHERE 
+		UnitMeasureCode = 'CAN'
+	_______________________________________________________________________________________________
+
+	SELECT *
+	FROM 
+		Production.UnitMeasureTest
+	ORDER BY 
+		UnitMeasureCode
+	
+c) 	UPDATE 
+		Production.UnitMeasureTest
+	SET 
+		UnitMeasureCode = 'TTT'
+
+d)	DELETE
+	FROM
+		Production.UnitMeasureTest
+
+e) 	SELECT *
+	FROM 
+		Sales.SalesOrderDetail
+	WHERE 
+		SalesOrderID = 43659 OR SalesOrderID = 43664
+	_______________________________________________________________________________________________
+
+	SELECT *,
+		MAX (LineTotal) OVER (PARTITION BY SalesOrderID) AS Max_total,
+		MIN (LineTotal) OVER (PARTITION BY SalesOrderID) AS Min_total,
+		AVG (LineTotal) OVER (PARTITION BY SalesOrderID) AS Avg_total
+	FROM
+		Sales.SalesOrderDetail
+	WHERE 
+		SalesOrderID = 43659 OR SalesOrderID = 43664
+	_______________________________________________________________________________________________
+
+	SELECT *,
+		MAX (LineTotal) OVER (PARTITION BY SalesOrderID) AS Max_total,
+		MIN (LineTotal) OVER (PARTITION BY SalesOrderID) AS Min_total,
+		AVG (LineTotal) OVER (PARTITION BY SalesOrderID) AS Avg_total
+	FROM 
+		Sales.SalesOrderDetail
+
+f) 	--answer - MITloginNorth America
+	SELECT *,
+		DENSE_RANK() OVER (ORDER BY SalesYTD DESC) AS RatingYTD,
+		CONCAT (UPPER(LEFT(LastName,3)), 'login', ISNULL(TerritoryGroup, '')) AS Login
+	FROM 
+		Sales.vSalesPerson
+	_______________________________________________________________________________________________
+
+	--answer - VARloginEurope
+	SELECT *,
+		DENSE_RANK() OVER (ORDER BY SalesLastYear DESC) AS RatingLastYear,
+		CONCAT (UPPER(LEFT(LastName,3)), 'login', ISNULL(TerritoryGroup, '')) AS Login
+	FROM 
+		Sales.vSalesPerson
+
+g)	SELECT 
+		CASE 
+        	WHEN DATENAME(WEEKDAY, dateadd(mm, DATEDIFF(MM, 0, getdate()), 0)) = 'Saturday'
+            		THEN dateadd(mm, DATEDIFF(MM, 0, getdate()), 0) + 2
+        	WHEN DATENAME(WEEKDAY, dateadd(mm, DATEDIFF(MM, 0, getdate()), 0)) = 'Sunday'
+            		THEN dateadd(mm, DATEDIFF(MM, 0, getdate()), 0) + 1
+        	ELSE dateadd(mm, DATEDIFF(MM, 0, getdate()), 0)
+        	END
+
+
+Task 5
+
+	COUNT(1)= 4
+	COUNT (name)= 2
+	COUNT (id) = 4
+	COUNT (*) = 4
