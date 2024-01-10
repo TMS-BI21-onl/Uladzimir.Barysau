@@ -1,0 +1,89 @@
+Task 6
+
+	CREATE TABLE Patients
+	(
+		ID				INT PRIMARY KEY IDENTITY,
+		FirstName		NVARCHAR(100) NOT NULL,
+		LastName		NVARCHAR(100) NOT NULL,
+		SSN				NVARCHAR(10) UNIQUE,
+		Email			AS CONCAT(UPPER(LEFT(FirstName,1)), LOWER(LEFT(LastName,3)), '@mail.com'),
+		Temp			DEC(4,2) NOT NULL,
+		CreatedDate		DATE NOT NULL
+	)
+
+
+Task 7
+
+	INSERT INTO 
+			Patients (FirstName, LastName, SSN, Temp, CreatedDate)
+	VALUES
+			('Alex', 'Trant', '19700823AT', '38.2', '2024-01-02'),
+			('Sofia', 'Smith', '20031201SS', '37.1', '2024-01-10'),
+			('Helga', 'Jones', '19930317HJ', '36.9', '2024-01-08'),
+			('Oliver', 'Brown', '20111010OB', '39.0', '2024-01-01'),
+			('Brandon', 'Lopez', '19890713BL', '37.8', '2024-01-06')
+
+
+Task 8
+
+	ALTER TABLE Patients
+	ADD TempType AS CASE
+				WHEN Temp < 37 THEN '< 37°C'
+				ELSE '> 37°C'
+				END  
+
+
+Task 9 
+
+	CREATE VIEW  dbo.vPatients 
+	AS   
+	SELECT 
+			ID
+			FirstName, 
+			LastName, 
+			SSN, 
+			Temp AS Temp_C,
+			Temp * 9 / 5 + 32 AS Temp_F, 
+			CreatedDate,
+			TempType
+	FROM Patients
+
+
+Task 10
+
+	CREATE FUNCTION dbo.udfTempF (
+		@Temp DEC(4,2)
+	)
+	RETURNS DEC(6,2)
+	AS
+	BEGIN
+		RETURN @Temp * 9.0 / 5.0 + 32.0
+	END
+
+
+Task 11
+
+	DECLARE @Weekday DATE
+	SET @Weekday = (SELECT 
+			CASE 
+        		WHEN DATENAME(WEEKDAY, dateadd(mm, DATEDIFF(MM, 0, getdate()), 0)) = 'Saturday'
+            			THEN dateadd(mm, DATEDIFF(MM, 0, getdate()), 0) + 2
+        		WHEN DATENAME(WEEKDAY, dateadd(mm, DATEDIFF(MM, 0, getdate()), 0)) = 'Sunday'
+            			THEN dateadd(mm, DATEDIFF(MM, 0, getdate()), 0) + 1
+        		ELSE dateadd(mm, DATEDIFF(MM, 0, getdate()), 0)
+        		END)
+	SELECT @Weekday
+
+
+Task 12
+
+	SELECT
+		e.FirstName,
+		CASE
+		WHEN End_date IS NULL THEN 'Work'
+		ELSE 'Left'
+		END
+	FROM
+		Employees e
+		FULL JOIN Job_history jh ON e.Employee_id = jh.Employee_id
+

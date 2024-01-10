@@ -1,0 +1,60 @@
+Task 1
+
+	SELECT
+		LEFT(Name, 1) AS First_letter,
+		COUNT(1) AS cnt
+	FROM
+		Employees
+	GROUP BY
+		Left(Name, 1)
+	HAVING 
+		COUNT(1) > 1
+	ORDER BY
+		1
+
+
+Task 2
+
+	SELECT 
+		Department_id,
+		Salary,
+		COUNT(Employee_id)
+	FROM
+		Employees
+	GTOUP BY
+		Department_id,
+		Salary
+			
+
+Task 3
+
+	SELECT
+		First_name,
+		Last_name
+	FROM 
+		Employees
+	WHERE
+		Manager_id IS NULL
+
+
+Task 4
+
+	SELECT
+		First_name,
+		LEN(First_name)
+	FROM Employees
+	ORDER BY
+		LEN(First_name) DESC
+
+
+Task 5
+
+	SELECT
+		e.FirstName,
+		CASE
+		WHEN End_date IS NULL THEN 'Work'
+		ELSE 'Left'
+		END
+	FROM
+		Employees e
+		FULL JOIN Job_history jh ON e.Employee_id = jh.Employee_id
