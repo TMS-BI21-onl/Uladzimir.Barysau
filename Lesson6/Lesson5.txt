@@ -1,0 +1,12 @@
+Task 3
+
+	USE AdventureWorks2017
+	GO
+
+	CREATE PROCEDURE dbo.uspDataChange
+	AS
+	UPDATE HumanResources.Employee
+	SET NationalIDNumber = 879341111
+	WHERE BusinessEntityID= 15
+
+	EXEC dbo.uspDataChange
