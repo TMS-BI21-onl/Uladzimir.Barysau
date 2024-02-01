@@ -1,0 +1,75 @@
+Task 1
+
+SELECT 
+	pp.FirstName, 
+	pp.LastName, 
+	ppp.PhoneNumber
+FROM 
+	Person.Person pp
+	JOIN Person.PersonPhone ppp ON pp.BusinessEntityID = ppp.BusinessEntityID
+WHERE 
+	ppp.PhoneNumber LIKE '4_5%'
+	
+
+
+Task 2
+
+SELECT 
+	NationalIDNumber,
+	DATEDIFF(YEAR, BirthDate, GETDATE()) AS Age,
+	CASE	WHEN DATEDIFF(YEAR, BirthDate, GETDATE()) >= 17 AND DATEDIFF(YEAR, BirthDate, GETDATE()) <= 20 THEN 'Adolescence'
+		WHEN DATEDIFF(YEAR, BirthDate, GETDATE()) >= 21 AND DATEDIFF(YEAR, BirthDate, GETDATE()) <= 59 THEN  'Adults'
+		WHEN DATEDIFF(YEAR, BirthDate, GETDATE()) >= 60 AND DATEDIFF(YEAR, BirthDate, GETDATE()) <= 75 THEN  'Elderly'
+		WHEN DATEDIFF(YEAR, BirthDate, GETDATE()) >= 76 AND DATEDIFF(YEAR, BirthDate, GETDATE()) <= 90 THEN  'Senile'
+		ELSE 'Other'
+	END AS AgeCategory
+FROM HumanResources.Employee
+
+
+Task 3
+
+a)
+SELECT 
+	TOP 1 WITH TIES StandardCost, 
+	Name
+FROM 
+	Production.Product
+ORDER BY 
+	StandardCost DESC
+
+b)
+SELECT
+	Name,
+	StandardCost
+FROM 
+	Production.Product
+WHERE
+	StandardCost = (SELECT MAX(StandardCost) 
+			FROM Production.Product)
+
+c)
+SELECT 
+	Name,
+	StandardCost
+FROM
+(SELECT 
+	Name, 
+	StandardCost,
+	RANK() OVER (ORDER BY StandardCost DESC) AS MaxCost
+FROM 
+Production.Product) Cost
+WHERE MaxCost = 1
+
+
+Task 4
+
+Тема - "Школа"
+Сущности:
+1) ученики (ID_ученика, ФИО, дата рождения, пол, ID_класса) 
+2) учителя (ID_учителя, ФИО, дата рождения, пол, стаж, ID_предмета) 
+3) классы (ID_класса, название класса, количество учеников, классный руководитель)
+4) предметы (ID_предмета, предмет, класс)
+5) кабинеты (ID_кабинета, номер кабинета, этаж, ответственный сотрудник)
+6) расписание (ID_предмета, ID_класса, ID_кабинета, ID_учителя, день недели, время)
+7) кружок (ID_кружка, название, время, день недели, количество участников)
+
