@@ -1,0 +1,52 @@
+Task 3
+
+a)
+SELECT *
+FROM (
+	SELECT ProductID, NAME, StandardCost, Color, MAX(StandardCost) OVER (PARTITION BY Color) AS Max_cost
+	FROM Production.Product
+) t
+WHERE 
+	StandardCost = Max_cost
+
+
+b)
+SELECT *
+FROM (
+	SELECT ProductID, NAME, StandardCost, Color, rank() OVER (PARTITION BY Color ORDER BY StandardCost DESC) as rnk
+	FROM [Production].[Product]
+) t
+WHERE rnk=1
+
+c)
+SELECT p.Color , 
+	ProductNumber, 
+	Name, 
+	p.StandardCost
+FROM Production.Product p JOIN 
+(
+SELECT Color, 
+	MAX(StandardCost) AS MaxCost 
+FROM Production.Product
+GROUP BY Color) t_rank ON p.Color=t_rank.Color OR (p.Color IS NULL AND t_rank.Color IS NULL)
+WHERE p.StandardCost=t_rank.MaxCost
+
+
+Task 4
+
+Тема - "Школа"
+Сущности:
+1) ученики (ID_ученика, ФИО, дата рождения, пол, ID_класса) 
+2) учителя (ID_учителя, ФИО, дата рождения, пол, стаж, ID_предмета) 
+3) классы (ID_класса, название класса, количество учеников, классный руководитель)
+4) предметы (ID_предмета, предмет, класс)
+5) кабинеты (ID_кабинета, номер кабинета, этаж, ответственный сотрудник)
+6) расписание (ID_предмета, ID_класса, ID_кабинета, ID_учителя, день недели, время)
+7) кружок (ID_кружка, название, время, день недели, количество участников)
+8) оценки (ID_ученика, ID_предмета, оценка)
+
+Задача 1
+Вывести расписание ID_ученика = 457 на четверг, состоящее из названия предмета, места проведения и учителя.
+
+Задача 2
+Вывести предмет и ФИО лучшего по успеваемости ученика (средняя оценка) в разрезе предметов.

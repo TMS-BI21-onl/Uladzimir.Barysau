@@ -1,0 +1,11 @@
+Task 2
+
+SELECT 
+	CONCAT(pch.LastName, ' ', LEFT(pch.FirstName, 1), '.') AS Child,
+	CONCAT(pfth.LastName, ' ', LEFT(pfth.FirstName, 1), '.') AS Father
+FROM 
+	People pch
+	JOIN People pfth ON pch.ID_Father = pfth.ID
+WHERE 
+	pch.FirstName = 'Дмитрий'
+
