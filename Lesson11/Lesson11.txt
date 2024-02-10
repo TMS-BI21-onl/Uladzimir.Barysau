@@ -1,0 +1,240 @@
+Task 2
+
+1. «Заказы» (№_заказа, дата_заказа, id_сотрудника, id_столика, id_чека)
+2. «Сотрудники» (id_сотрудника, фамилия, имя, отчество, должность, дата рождения, паспортные данные, № телефона)
+3. «Столики» (id_столика, количество мест, расположение)
+4. «Чек» (id_чека, id_блюда, количество блюда, id_напитка, количество напитка)
+5. «Блюда» (id_блюда, наименование, вес, стоимость)
+6. «Бар» (id_напитка, наименование, объем, стоимость)
+7. «Состав блюда» (id_блюда, наименование ингредиента, вес, стоимость ингредиента, количество)
+
+
+1. Отсортировать сотрудников по кол-ву обработанных заказов в день рождения. Найдем самого ответственного :)
+
+SELECT	
+	З.id_сотрудника, 
+	CONCAT(С.фамилия, ' ', LEFT(С.имя, 1), '.', LEFT(С.отчество, 1), '.') AS ФИО,
+	COUNT(З.№_заказа) OVER (PARTITION BY З.id_сотрудника) AS cnt
+FROM	
+	Заказы З 
+	JOIN Сотрудники С ON З.id_сотрудника = С.id_сотрудника
+WHERE 
+	З.дата_заказа = С.дата_рождения
+ORDER BY
+	cnt DESC
+
+
+2. Вывести самый популярный ингридиент для каждого месяца 2023 года. 
+
+SELECT 
+	наименование ингредиента, 
+	month
+FROM (
+	SELECT *,	
+		COUNT(Ч.id_блюда) OVER (PARTITION BY MONTH(З.дата_заказа)) AS cnt,
+		MONTH(З.дата_заказа) AS month
+	FROM	
+		Состав_блюда СБ 
+		JOIN Чек Ч ON СБ.id_блюда = Ч.id_блюда
+		JOIN Заказы 3 ON Ч.id_чека = З.id_чека
+	ORDER BY 
+		cnt DESC
+	) t
+WHERE
+	СБ.количество = (
+			SELECT
+				MAX(СБ.вес) OVER (PARTITION BY id_блюда) AS Max_qnt
+			FROM 
+				состав_блюда
+			) t2
+
+Task 3
+
+CREATE TABLE dbo.Lesson11 (
+			Function_name	NVARCHAR(50) ,
+			Function_count	INT
+			)
+
+MERGE dbo.Lesson11 AS target
+USING (
+	SELECT 
+		Alex AS Function_name,
+		count(Alex) AS Function_count
+	FROM
+		dbo.data_for_merge
+	WHERE
+		Alex IS NOT NULL
+	GROUP BY 
+		Alex
+	) AS source
+ON target.Function_name = source.Function_name
+WHEN MATCHED 
+	THEN UPDATE SET target.Function_count = source.Function_name + target.Function_count
+WHEN NOT MATCHED BY TARGET
+	THEN INSERT (Function_name, Function_count) 
+	VALUES (source.Function_name, source.Function_count)
+;
+GO
+MERGE dbo.Lesson11 AS target
+USING (
+	SELECT 
+		Carlos AS Function_name,
+		count(Carlos) AS Function_count
+	FROM
+		dbo.data_for_merge
+	WHERE
+		Carlos IS NOT NULL
+	GROUP BY 
+		Carlos
+	) AS source
+ON target.Function_name = source.Function_name
+WHEN MATCHED 
+	THEN UPDATE SET target.Function_count = source.Function_count + target.Function_count
+WHEN NOT MATCHED BY TARGET
+	THEN INSERT (Function_name, Function_count) 
+	VALUES (source.Function_name, source.Function_count)
+;
+GO
+MERGE dbo.Lesson11 AS target
+USING (
+	SELECT 
+		Charles AS Function_name,
+		count(Charles) AS Function_count
+	FROM
+		dbo.data_for_merge
+	WHERE
+		Charles IS NOT NULL
+	GROUP BY 
+		Charles
+	) AS source
+ON target.Function_name = source.Function_name
+WHEN MATCHED 
+	THEN UPDATE SET target.Function_count = source.Function_count + target.Function_count
+WHEN NOT MATCHED BY TARGET
+	THEN INSERT (Function_name, Function_count) 
+	VALUES (source.Function_name, source.Function_count)
+;
+GO
+MERGE dbo.Lesson11 AS target
+USING (
+	SELECT 
+		Daniel AS Function_name,
+		count(Daniel) AS Function_count
+	FROM
+		dbo.data_for_merge
+	WHERE
+		Daniel IS NOT NULL
+	GROUP BY 
+		Daniel
+	) AS source
+ON target.Function_name = source.Function_name
+WHEN MATCHED 
+	THEN UPDATE SET target.Function_count = source.Function_count + target.Function_count
+WHEN NOT MATCHED BY TARGET
+	THEN INSERT (Function_name, Function_count) 
+	VALUES (source.Function_name, source.Function_count)
+;
+GO
+MERGE dbo.Lesson11 AS target
+USING (
+	SELECT 
+		Esteban AS Function_name,
+		count(Esteban) AS Function_count
+	FROM
+		dbo.data_for_merge
+	WHERE
+		Esteban IS NOT NULL
+	GROUP BY 
+		Esteban
+	) AS source
+ON target.Function_name = source.Function_name
+WHEN MATCHED 
+	THEN UPDATE SET target.Function_count = source.Function_count + target.Function_count
+WHEN NOT MATCHED BY TARGET
+	THEN INSERT (Function_name, Function_count) 
+	VALUES (source.Function_name, source.Function_count)
+;
+GO
+MERGE dbo.Lesson11 AS target
+USING (
+	SELECT 
+		Fred AS Function_name,
+		count(Fred) AS Function_count
+	FROM
+		dbo.data_for_merge
+	WHERE
+		Fred IS NOT NULL
+	GROUP BY 
+		Fred
+	) AS source
+ON target.Function_name = source.Function_name
+WHEN MATCHED 
+	THEN UPDATE SET target.Function_count = source.Function_count + target.Function_count
+WHEN NOT MATCHED BY TARGET
+	THEN INSERT (Function_name, Function_count) 
+	VALUES (source.Function_name, source.Function_count)
+;
+GO
+MERGE dbo.Lesson11 AS target
+USING (
+	SELECT 
+		George AS Function_name,
+		count(George) AS Function_count
+	FROM
+		dbo.data_for_merge
+	WHERE
+		George IS NOT NULL
+	GROUP BY 
+		George
+	) AS source
+ON target.Function_name = source.Function_name
+WHEN MATCHED 
+	THEN UPDATE SET target.Function_count = source.Function_count + target.Function_count
+WHEN NOT MATCHED BY TARGET
+	THEN INSERT (Function_name, Function_count) 
+	VALUES (source.Function_name, source.Function_count)
+;
+GO
+MERGE dbo.Lesson11 AS target
+USING (
+	SELECT 
+		Lando AS Function_name,
+		count(Lando) AS Function_count
+	FROM
+		dbo.data_for_merge
+	WHERE
+		Lando IS NOT NULL
+	GROUP BY 
+		Lando
+	) AS source
+ON target.Function_name = source.Function_name
+WHEN MATCHED 
+	THEN UPDATE SET target.Function_count = source.Function_count + target.Function_count
+WHEN NOT MATCHED BY TARGET
+	THEN INSERT (Function_name, Function_count) 
+	VALUES (source.Function_name, source.Function_count)
+;
+GO
+MERGE dbo.Lesson11 AS target
+USING (
+	SELECT 
+		Lewis AS Function_name,
+		count(Lewis) AS Function_count
+	FROM
+		dbo.data_for_merge
+	WHERE
+		Lewis IS NOT NULL
+	GROUP BY 
+		Lewis
+	) AS source
+ON target.Function_name = source.Function_name
+WHEN MATCHED 
+	THEN UPDATE SET target.Function_count = source.Function_count + target.Function_count
+WHEN NOT MATCHED BY TARGET
+	THEN INSERT (Function_name, Function_count) 
+	VALUES (source.Function_name, source.Function_count)
+;
+
+SELECT *
+FROM dbo.Lesson11
+ORDER BY Function_count DESC
