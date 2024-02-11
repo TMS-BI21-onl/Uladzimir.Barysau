@@ -1,0 +1,7 @@
+Well done!
+
+No negative comments, great job!
+
+PR comments: task 2 wouldn't run, because
+1) subqueries in the where should not be named
+2) comparing amount = subquery will cause error becasue subquery will return multiple rows and you're trying to compare one row to many at once.
