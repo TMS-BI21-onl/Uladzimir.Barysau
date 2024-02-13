@@ -1,0 +1,88 @@
+Task 1
+Написать запрос на добавление в таблицу manufacturer нового производителя HP из Америки.
+
+INSERT INTO 
+	Manufacturer (Name, Country_id)
+	VALUES ('HP', '4')
+
+
+Task 2
+Написать запрос, благодаря которому возраст пользователя Андрей в таблице user уменьшится в 3 раза.
+
+UPDATE 
+	User
+SET 
+	Age = Age / 3
+WHERE
+	Name = 'Андрей'
+
+
+Task 3
+Найти название продукта с максимальной ценой
+
+a)
+SELECT 
+	TOP 1 WITH TIES Price, 
+	Name
+FROM 
+	Product
+ORDER BY 
+	Price DESC
+
+b)
+SELECT
+	Name,
+	Price
+FROM 
+	Product
+WHERE
+	Price = (SELECT MAX(Price) 
+		FROM Product)
+
+c)
+SELECT 
+	Name,
+	Price
+FROM (
+	SELECT 
+		Name, 
+		Price,
+		RANK() OVER (ORDER BY Price DESC) AS MaxCost
+	FROM 
+		Product
+) Cost
+WHERE 
+	MaxCost = 1
+
+
+Task 4
+Написать запрос на выборку всех пользователей с телефонами, начинающимися на +3 и заканчивающимися на 4, либо с возрастом > 35.
+
+SELECT 
+	u.Name, 
+	u.Age, 
+	p.Name
+FROM 
+	User u
+	JOIN Phone p ON u.User_id = p.User_id
+WHERE 
+	u.Age > 35 OR p.Name LIKE '+3%4'
+
+
+Task 5
+Найти топ 5 пользователей, кто купил больше всего продуктов
+
+SELECT 
+	TOP 5 WITH TIES u.Name
+FROM (
+	SELECT
+		u.Name
+		COUNT(o.Order_id) OVER (PARTITION BY o.User_id) AS cnt
+	FROM	
+		Order o
+		JOIN User u ON o.User_id = u.id
+) t
+ORDER BY
+	cnt DESC
+
+
