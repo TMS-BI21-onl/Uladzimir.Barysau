@@ -1,0 +1,63 @@
+Task 1
+
+CREATE VIEW v_raiting
+AS
+SELECT DISTINCT TOP 50 WITH TIES FirstName, 
+	LastName,
+	PassportID, 
+	SUM(rnk) OVER (PARTITION BY PassportID) AS raiting
+FROM (
+	SELECT CAST(Orderdate as date) as ord_date, 
+			FirstName,
+			LastName,
+			PassportID,
+			COUNT(OrderID) as cnt,
+			CASE
+			WHEN COUNT(OrderID) >= 3
+				THEN 3
+			WHEN COUNT(OrderID) = 2
+				THEN 2
+			ELSE 1
+			END AS rnk
+	FROM Orders o JOIN Client c ON o.ClientID=c.ClientID
+	WHERE StatusID IN (1, 2, 3, 4)
+	GROUP BY CAST(Orderdate as date), FirstName, LastName, PassportID
+) T
+ORDER BY raiting DESC
+
+
+Task 2
+
+a) 
+Убрать заливку фона 
+Убрать линии сетки
+Убрать заливку области диаграммы
+Ряды данных сделать одного цвета
+Убрать Легенду
+Убрать название горизонтальной оси
+Сократить название диангарммы до "Calories per 100g"
+Убрать название на вертикальной оси
+
+b)
+Заменить на круговую диаграмму
+40.7 млрд кажутся в раза 3 больше за 33.5 млрд, что протеворечит математике (искажение данных)
+На круговой диаграмме использовать:
+ - название
+ - 2 цвета
+ - вывести значение (млрд/%)
+ - сохранить легенду
+
+c)
+Заменить на круговую диаграмму, использовать:
+ - название
+ - 3 цвета
+ - вывести значение (млрд/%)
+ - сохранить легенду по гурппам
+ЛИБО
+Вывести названия на горизонтальной оси в легенду и рядам данных присвоить 3 разных цвета
+Поменять название диаграммы 
+Убрать из вертикальной оси "тыс", лучше в названии оставить "тыс" либо подписать ось "тыс."
+ЛИБО
+Можно поменять местами горизонтальную и вертикальную ось
+Сократить название диаграммы до Посещения музея
+Убрать из 4 тыс "тыс".
