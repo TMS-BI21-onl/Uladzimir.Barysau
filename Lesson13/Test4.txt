@@ -84,5 +84,3 @@ FROM (
 ) t
 ORDER BY
 	cnt DESC
-
-
