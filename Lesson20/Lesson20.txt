@@ -1,0 +1,78 @@
+Task 1
+
+SELECT e.First_Name , e.Last_Name, cnt
+FROM Employees e 
+JOIN (
+	SELECT manager_id , COUNT(EmploeID) AS cnt
+	FROM Employees e
+	GROUP BY manager_id
+	HAVING COUNT(EmploeID) > 6 
+	) t ON e.Employee_id = t.manager_id
+WHERE t.manager_id IS NOT NULL
+
+
+Task 2
+
+SELECT d.Department_name,
+	MIN(Salary*((100-Commission_pct)/100))) AS min_salary,
+	MAX(Salary*((100-Commission_pct)/100))) AS max_salary
+FROM Employees e
+	JOIN Departments d ON e.Department_id = d.Department_id
+GROUP BY d.Department_name
+
+
+Task 3
+
+SELECT TOP 1 WITH TIES t.Region_name
+FROM (
+	SELECT 
+		r.Region_name, 
+		COUNT(e.Emploe_id) AS cnt
+	FROM Employees e
+		JOIN Departmrnts d ON e.department_id = d.department_id
+		JOIN Location l ON d.Location_id = l.Locationt_id
+		JOIN Countries c ON l.country_id = c.country_id
+		JOIN Regions r ON c.Region_id = r.Region_id
+	GROUP BY r.Region_name
+	ORDER BY cnt DESC) t
+
+
+Task 4
+
+SELECT 
+	Department_name, 
+	((AVG(salary)-AVG_salary_by_dep)/AVG(salary))*100 AS dif
+FROM (
+	SELECT 
+		Department_name, 
+		AVG(Salary) OVER (PARTITION BY Department_id) AS AVG_salary_by_dep
+	FROM 
+		Employees e JOIN
+		Departmrnts d ON e.department_id = d.department_id
+	) t
+
+
+Task 5
+
+SELECT e.First_name, e.Last_name, work_time 
+FROM (
+	Select e.First_name, e.Last_name,
+		CASE 
+		WHEN h.End_Date IS NULL 
+		THEN DATEDIFF(YEAR, GETDATE(), h.Start_date)
+		WHEN h.End_Date IS NOT NULL 
+		THEN DATEDIFF(YEAR, h.end_date, h.Start_date)
+		END AS work_time
+	FROM Job_histopy h
+	JOIN Employees e ON h.Employee_id = e.Employee_id
+	GROUP BY h.Employee_id, h.Department_id
+	) t
+WHERE work_time > 10
+
+
+Task 6  
+
+SELECT First_name, Last_name
+FROM (SELECT First_name, Last_name, DENSE_RANK() OVER (ORDER BY Salary DESC) AS Rating
+      FROM Employees) t
+WHERE Rating BETWEEN 5 AND 10
